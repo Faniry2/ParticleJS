@@ -19,12 +19,12 @@ window.addEventListener(("mousemove"), (event)=>{
 function init(){
   
     ps=[]
-    for(let i=0; i<1000;i++){
+    for(let i=0; i<200;i++){
         let x=Math.random()*canvas.width
         let y=Math.random()*canvas.height
         ps.push(new Particule(x,y))
     }
-  
+   console.log(ps)
 }
 
 function anim(){
@@ -49,7 +49,7 @@ function anim2(p){
     requestAnimationFrame(()=>{anim2(p)})
 }
 
-    let b=false
+    let b=true
     if(b){
         ctx.fillStyle="black"
         ctx.font= '20px Verdana'

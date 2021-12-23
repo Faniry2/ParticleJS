@@ -4,6 +4,7 @@ class Particule{
         this.size=3
         this.x=x
         this.y=y
+        this.plusorless=(Math.round(Math.random())) < 0.85 ? 1 : -1
         this.xOrigin=this.x
         this.yOrigin=this.y
         this.r=r
@@ -12,6 +13,7 @@ class Particule{
         this.a=a
         this.lifeTime=0;
         this.density= (Math.random() *30)+1
+        this.angle=0
         
     }
     
@@ -44,7 +46,8 @@ class Particule{
         let force=0
         let directionX=0
         let directionY=0
-        if(ismouseMove){
+
+        if(isMouseMouve){
             dx= mouse.x-this.x
             dy=mouse.y-this.y
             distNorme=Math.sqrt(dx*dx+dy*dy)
@@ -67,13 +70,14 @@ class Particule{
                }
                
            }
-        }else{
-            
         }
-            
+       
         
-        
-    }
+        this.x-=(((0.5*Math.random())+5) *this.plusorless)/25
+        this.y-=(((0.5*Math.random())+2) *this.plusorless) /25
+        /*this.targetY=this.y+10
+        this.targetX=this.X+10*/
+}
     
     linkParticule(strokeColor, lw,p){
         
@@ -93,7 +97,7 @@ class Particule{
                 let dx=a[i].x-a[j].x
                 let dy=a[i].y-a[j].y
                 let dist=Math.sqrt(dx*dx+dy*dy)
-                if(dist < 30){
+                if(dist < 50){
                     ctx.strokeStyle=strokeColor
                     ctx.lineWidth=lw
                     ctx.beginPath();
@@ -106,7 +110,6 @@ class Particule{
     }
 
     imageToParticule(){
-        
         ctx.fillStyle= "black"//`rgb(${this.r},${this.g},${this.b})`;
         ctx.beginPath();
         ctx.arc(this.x,this.y,this.size,0,Math.PI*2)
