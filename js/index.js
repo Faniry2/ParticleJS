@@ -4,11 +4,13 @@ const mouse={
     y:0,
     radius:150
 }
+let isMouseMouve= false
 const canvas= document.getElementById("fan_canvas")
 let ctx=canvas.getContext('2d')
     canvas.width=800
     canvas.height=800
 window.addEventListener(("mousemove"), (event)=>{
+    isMouseMouve=true
     mouse.x=event.clientX;
     mouse.y=event.clientY
 });
@@ -18,11 +20,11 @@ function init(){
   
     ps=[]
     for(let i=0; i<1000;i++){
-        let x=Math.random()*canvas.width;
+        let x=Math.random()*canvas.width
         let y=Math.random()*canvas.height
         ps.push(new Particule(x,y))
     }
-
+  
 }
 
 function anim(){
@@ -30,9 +32,9 @@ function anim(){
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     for(let p of ps){
          p.imageToParticule()
-         
          .update()
     }
+   new Particule().linkParticule("red",1,ps)
     requestAnimationFrame(anim)
 }
 function anim2(p){
@@ -43,18 +45,25 @@ function anim2(p){
          p.pixels[i].imageToParticule()
            .update()
     }
-    p.linkParticule("red",1)
+    p.linkParticule("red",.5,null)
     requestAnimationFrame(()=>{anim2(p)})
 }
 
-    ctx.fillStyle="black"
-    ctx.font= '20px Verdana'
-    ctx.fillText("FANIRY",0,50)
-    let imageData=ctx.getImageData(0,0,1000,1000);
-    let p= new Particule();
-    p.retrieveImageParticule(imageData)
+    let b=false
+    if(b){
+        ctx.fillStyle="black"
+        ctx.font= '20px Verdana'
+        ctx.fillText("FANIRY",0,50)
+        let imageData=ctx.getImageData(0,0,1000,1000);
+        let p= new Particule();
+        p.retrieveImageParticule(imageData)
+       
+        anim2(p)
+    }else{
+         init()
+        anim()
+    }
    
-    anim2(p)
 
 
 
