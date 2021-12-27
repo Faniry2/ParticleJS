@@ -1,5 +1,5 @@
 class Particule{
-    constructor(x,y,r,g,b,a){
+    constructor(x,y,r,g,b,a,w,h){
         this.pixels=[]
         this.size=3
         this.x=x
@@ -14,6 +14,8 @@ class Particule{
         this.lifeTime=0;
         this.density= (Math.random() *30)+1
         this.angle=0
+        this.w=w
+        this.h=h
         
     }
     
@@ -30,7 +32,7 @@ class Particule{
                        let green=imageData.data[pos+ 1]
                        let blue=imageData.data[pos+ 2]  
                        let alpha=imageData.data[pos+3]
-                       this.pixels[pixelIndex]=new Particule((x*10),(y*10),red,green,blue,alpha)
+                       this.pixels[pixelIndex]=new Particule((x*10),(y*10),red,green,blue,alpha,800,800)
                        pixelIndex++;
                    }
             }
@@ -46,7 +48,7 @@ class Particule{
         let force=0
         let directionX=0
         let directionY=0
-
+        
         if(isMouseMouve){
             dx= mouse.x-this.x
             dy=mouse.y-this.y
@@ -70,13 +72,14 @@ class Particule{
                }
                
            }
+           
+        }else{
+            this.x-=(((0.5*Math.random())+5) *this.plusorless)/9
+            this.y-=(((0.5*Math.random())+2) *this.plusorless) /9
+            
         }
-       
+        this.#collisionDetectForBTLR();
         
-        this.x-=(((0.5*Math.random())+5) *this.plusorless)/25
-        this.y-=(((0.5*Math.random())+2) *this.plusorless) /25
-        /*this.targetY=this.y+10
-        this.targetX=this.X+10*/
 }
     
     linkParticule(strokeColor, lw,p){
@@ -109,6 +112,30 @@ class Particule{
         }
     }
 
+    #collisionDetectForBTLR(){
+       
+        //( (this.x >= 0) && (this.x <= this.width) ) && 
+        
+        if( (this.x >=0 && this.x <= this.w) && (this.y<=0) ){
+             this.y-=this.y/2
+             this.plusorless=-1
+        }
+        if( (this.y>=0 && this.y<= this.h) && this.x<=0){
+            this.x-=this.x*Math.random()/2
+            this.plusorless=-1
+        }
+        if((this.y>=0 && this.y<= this.h) && this.x >= this.w){
+            this.x-=(Math.random()*6)/2
+            this.plusorless=1
+        }
+        if(((this.x >=0 && this.x <= this.w)) && this.y>=(this.h)){
+            this.y-=(Math.random()*6)/2
+            this.plusorless=1
+        }
+        
+    }
+
+    
     imageToParticule(){
         ctx.fillStyle= "black"//`rgb(${this.r},${this.g},${this.b})`;
         ctx.beginPath();

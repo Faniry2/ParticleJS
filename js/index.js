@@ -9,22 +9,27 @@ const canvas= document.getElementById("fan_canvas")
 let ctx=canvas.getContext('2d')
     canvas.width=800
     canvas.height=800
-window.addEventListener(("mousemove"), (event)=>{
+let timeout
+canvas.addEventListener(("mousemove"), (event)=>{
     isMouseMouve=true
     mouse.x=event.clientX;
     mouse.y=event.clientY
+        
+   
+    
 });
+
 
 
 function init(){
   
     ps=[]
-    for(let i=0; i<200;i++){
+    for(let i=0; i<400;i++){
         let x=Math.random()*canvas.width
         let y=Math.random()*canvas.height
-        ps.push(new Particule(x,y))
+        ps.push(new Particule(x,y,"","","","",canvas.width,canvas.height))
     }
-   console.log(ps)
+  
 }
 
 function anim(){
@@ -61,7 +66,7 @@ function anim2(p){
         anim2(p)
     }else{
          init()
-        anim()
+         anim()
     }
    
 
