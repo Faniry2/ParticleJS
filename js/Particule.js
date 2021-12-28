@@ -1,25 +1,25 @@
 class Particule{
-    constructor(x,y,r,g,b,a,w,h){
+
+    #plusorless=0
+   
+    #xOrigin=0
+    #yOrigin=0
+    #density=0
+    constructor(x,y,w,h,options){
+       
+        this.options=Object.assign({},options)
         this.pixels=[]
-        this.size=3
-        this.x=x
-        this.y=y
-        this.plusorless=(Math.round(Math.random())) < 0.85 ? 1 : -1
-        this.xOrigin=this.x
-        this.yOrigin=this.y
-        this.r=r
-        this.g=g
-        this.b=b
-        this.a=a
-        this.lifeTime=0;
-        this.density= (Math.random() *30)+1
-        this.angle=0
-        this.w=w
+        this.x=x,
+        this.y=y,
+        this.w=w,
         this.h=h
-        
+        this.#plusorless=(Math.round(Math.random())) < 0.85 ? 1 : -1
+        this.#xOrigin=this.x
+        this.#yOrigin=this.y
+        this.#density= (Math.random() *30)+1
     }
     
-   retrieveImageParticule(imageData){
+   retrieveImageParticule(imageData,o){
         let pixelIndex=0;
         for(let y=0; y <imageData.height; y++){
             for(let x=0; x<imageData.width; x++){
@@ -32,7 +32,14 @@ class Particule{
                        let green=imageData.data[pos+ 1]
                        let blue=imageData.data[pos+ 2]  
                        let alpha=imageData.data[pos+3]
-                       this.pixels[pixelIndex]=new Particule((x*10),(y*10),red,green,blue,alpha,800,800)
+                       let op=Object.assign({},{
+                           r:red,
+                           g: green,
+                           b: blue,
+                           a:alpha,
+                        },o)
+                      
+                       this.pixels[pixelIndex]=new Particule((x*10),(y*10),800,800,op)
                        pixelIndex++;
                    }
             }
@@ -56,53 +63,53 @@ class Particule{
             fx=dx/distNorme
             fy=dy/distNorme
             force=(mouse.radius-distNorme) /mouse.radius
-            directionX= fx * force * this.density;
-            directionY=fy *force *this.density 
+            directionX= fx * force * this.#density;
+            directionY=fy *force *this.#density 
            if(distNorme < mouse.radius){
                this.x-=directionX; 
                this.y-=directionY ;
            }else{
-               if(this.x !==this.xOrigin){
-                  let dx=this.x-this.xOrigin;
+               if(this.x !==this.#xOrigin){
+                  let dx=this.x-this.#xOrigin;
                   this.x -=dx/2
                }
-               if(this.y!==this.yOrigin){
-                   let dy=this.y-this.yOrigin
+               if(this.y!==this.#yOrigin){
+                   let dy=this.y-this.#yOrigin
                    this.y -=dy/2
                }
                
            }
            
         }else{
-            this.x-=(((0.5*Math.random())+5) *this.plusorless)/9
-            this.y-=(((0.5*Math.random())+2) *this.plusorless) /9
+            this.x-=(((0.5*Math.random())+5) *this.#plusorless)/9
+            this.y-=(((0.5*Math.random())+2) *this.#plusorless) /9
             
         }
         this.#collisionDetectForBTLR();
         
 }
     
-    linkParticule(strokeColor, lw,p){
+    linkParticule(p){
         
         if(p!=null){
-            this.#makeLinkage(strokeColor,lw,p)
+            this.#makeLinkage(p)
 
         }else{
-            this.#makeLinkage(strokeColor,lw,this.pixels)
+            this.#makeLinkage(this.pixels)
         }
         
         return this
     }
-    #makeLinkage(strokeColor,lw,a){
+    #makeLinkage(a){
         
         for(let i=0; i<a.length;i++){
             for(let j=0; j<a.length;j++){
                 let dx=a[i].x-a[j].x
                 let dy=a[i].y-a[j].y
                 let dist=Math.sqrt(dx*dx+dy*dy)
-                if(dist < 50){
-                    ctx.strokeStyle=strokeColor
-                    ctx.lineWidth=lw
+                if(dist < a[0].options.maxDistLinkage){
+                    ctx.strokeStyle=a[0].options.strokeColor
+                    ctx.lineWidth=a[0].options.strokeLineWidth
                     ctx.beginPath();
                     ctx.moveTo(a[i].x,a[i].y)
                     ctx.lineTo(a[j].x,a[j].y)
@@ -117,29 +124,29 @@ class Particule{
         //( (this.x >= 0) && (this.x <= this.width) ) && 
         
         if( (this.x >=0 && this.x <= this.w) && (this.y<=0) ){
-             this.y-=this.y/2
-             this.plusorless=-1
+             this.y+=this.y/2
+             this.#plusorless=-1
         }
         if( (this.y>=0 && this.y<= this.h) && this.x<=0){
             this.x-=this.x*Math.random()/2
-            this.plusorless=-1
+            this.#plusorless=-1
         }
         if((this.y>=0 && this.y<= this.h) && this.x >= this.w){
             this.x-=(Math.random()*6)/2
-            this.plusorless=1
+            this.#plusorless=1
         }
         if(((this.x >=0 && this.x <= this.w)) && this.y>=(this.h)){
             this.y-=(Math.random()*6)/2
-            this.plusorless=1
+            this.#plusorless=1
         }
         
     }
-
+    
     
     imageToParticule(){
-        ctx.fillStyle= "black"//`rgb(${this.r},${this.g},${this.b})`;
+        ctx.fillStyle= this.options.particuleColor
         ctx.beginPath();
-        ctx.arc(this.x,this.y,this.size,0,Math.PI*2)
+        ctx.arc(this.x,this.y,this.options.size,0,Math.PI*2)
         ctx.closePath();
         ctx.fill();
         return this
@@ -148,4 +155,6 @@ class Particule{
     
     
 }
+
+
 
