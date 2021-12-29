@@ -99,5 +99,5 @@ strokeColor|string| Color of the lines that bind the particles together
 strokeLineWidth| int| Size of the lines that bind the particles together
 size|int| Particle Size
 particleColor|string| Particle color
-maxDistLinklage|int | If the distance between two particles is less than maxDistLinkage then they will be linked together
+maxDistLinkage|int | If the distance between two particles is less than maxDistLinkage then they will be linked together
 
