@@ -1,7 +1,6 @@
 class Particule{
 
     #plusorless=0
-   
     #xOrigin=0
     #yOrigin=0
     #density=0

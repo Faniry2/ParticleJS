@@ -3,12 +3,15 @@ const mouse={
     y:0,
     radius:150
 }
+
 let isMouseMouve= false
 const canvas= document.getElementById("fan_canvas")
+
 let ctx=canvas.getContext('2d')
     canvas.width=800
     canvas.height=800
-let timeout
+
+
 window.addEventListener(("mousemove"), (event)=>{
     isMouseMouve=true
     mouse.x=event.clientX;
@@ -16,12 +19,13 @@ window.addEventListener(("mousemove"), (event)=>{
 });
 
 let options={
-    strokeColor: 'red',
+    strokeColor: 'white',
     strokeLineWidth: 1,
     size:3,
-    particuleColor:'black',
+    particuleColor:'white',
     maxDistLinkage:50
 }
+
 function init(){
   
     ps=[]
@@ -33,6 +37,9 @@ function init(){
   
 }
 
+
+
+
 /*animation nuage de particules */
 function anim(){
     
@@ -42,41 +49,11 @@ function anim(){
          .update()
         
     }
-    new Particule().linkParticule(ps)
+  
+      new Particule().linkParticule(ps)
    
     requestAnimationFrame(anim)
 }
 
-
-/*animation for text */
-function anim2(p){
-    
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-    for(let i=0 ; i< p.pixels.length;i++){
-         p.pixels[i].imageToParticule()
-         .update()
-       
-    }
-   p.linkParticule(null)
-   requestAnimationFrame(()=>{anim2(p)})
-}
-let isTextAnimation=false
-
-
-if(isTextAnimation){
-    ctx.fillStyle="black"
-    ctx.font= '20px Verdana'
-    ctx.fillText("FANIRY",0,40)
-    let imageData=ctx.getImageData(0,0,1000,1000);
-    let p= new Particule();
-    p.retrieveImageParticule(imageData,options)
-    anim2(p)
-}else{
-     init()
-     anim()
- }
-   
-
-
-
-
+init()
+anim()
